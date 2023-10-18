@@ -1,0 +1,29 @@
+{# id = unique id => id="article-{{ article.id }} #}
+<div class="col-xl-3 col-xs-12 col-md-12 card text-center me-5 mt-4 shadow bg-body-tertiary rounded offrecard " id="product-{{ product.id }}">
+	<div class="blog-card-img mt-4">
+		<img src="{{ vich_uploader_asset(product, 'image')}}" alt="product.name">
+
+	</div>
+	<div class="blog-card-content">
+		<p class="blog-card-content-date">
+			<i class="bi bi-calendar-range-fill"></i>
+			{{ product.createdAt|format_datetime('full', 'none') }}
+		</p>
+		<h2 class="blog-card-content-title">{{ product.name|sanitize_html }}</h2>
+
+		<p class="blog-card-content-desc mt-4">{{ product.price}}€</p>
+
+		{% if app.request.get('_route') == 'admin.products.index' %}
+			<div class="d-flex justify-content-between  me-4 ms-4 my-2">
+				<a href="{{ path('admin.products.edit', {id: product.id}) }}" class="btn btn-warning">Modifier</a>
+				{% include 'Backend/Product/_deleteForm.html.twig' %}
+			</div>
+		{% elseif app.request.get('_route') == 'app.products.index' %}
+			<div class="d-flex justify-content-between  me-4 ms-4 my-2">
+				<a href="{{ path('app.orders.index' )}}" class="btn btn-info">Ajouter</a>
+				{# <button class="add-to-cart btn btn-info" data-product-id="{{ product.id }}">Ajouter</button> #}
+				<a href="{{path('app.orders.payment', {id: product.id})}}" class="btn btn-warning">Acheter</a>
+			</div>
+		{% endif %}
+	</div>
+</div>

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Payment
+	{{ parent() }}
+{% endblock %}
+
+
+{% block body %}
+	<!-- Icons Grid -->
+	<section class="features-icons bg-light text-center mt-5">
+		<div class="container ">
+			<div class="row mt-5">
+				<div class="col">
+					<div class="card-body">
+						<form action="{{ path('app.orders.subscription', {'id': product.id }) }}" method="post" id="payment-form">
+							<div
+								class="form-row mt-5">
+								{# dans ce block va ajouter une formulaire de paiement #}
+								<div id="card-elements">Paiement
+									<div id="product" data-id="{{ product.id }}"></div>
+									<div id="clientSecret" data-id="{{ intentSecret }}"></div>
+									<div id="username" data-id="{{ user.lastname }}"></div>
+									<div id="useremail" data-id="{{ user.email }}"></div>
+								</div>
+								<script src="https://js.stripe.com/v3"></script>
+								{# ajout message de errors #}
+								<div id="card-errors" role="alert"></div>
+							</div>
+							<button class="btn btn-primary mt-4">
+								Acheter
+								{{ product.price }}
+								€
+							</button>
+						</form>
+					</div>
+				</div>
+				<div class="col mt-5">
+					<div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+						<img src="{{ vich_uploader_asset(product, 'image')}}" alt="product.name" class="img-thumbnail w-50 p-3 ">
+						<h3>
+							{{ product.name }}
+						</h3>
+						<p>
+							{{ product.description }}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+{% endblock %}

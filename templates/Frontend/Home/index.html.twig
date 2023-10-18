@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Homepage
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+	<section class="container mt-4 position-relative">
+		<h1 class="text-center">Nos derniers Produits</h1>
+		<a href="#" class="btn btn-primary position-absolute top-0 left-0">Voir les articles</a>
+		{# <div class="blog-list mt-4">
+					{% for produit in produits %}
+						{% include 'Components/_produitCard.html.twig' %}
+					{% endfor %}
+				</div> #}
+	</section>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Mon panier
+	{{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% block body %}
+	<section class="container mt-4">
+		<h1 class="text-center">Mon Panier</h1>
+		<table class="table table-striped table-light mt-4">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Nom de produit</th>
+					<th>Prix</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for product in products %}
+					<tr>
+						<td>{{ product.id }}</td>
+						<td>{{ product.name }}</td>
+						<td>{{ product.price }}€</td>
+						<td>
+							<div class="d-flex justify-content-between">
+								<a href="{{ path('app.orders.index') }}" class="btn btn-warning">Payer</a>
+								{% include 'Backend/Product/_deleteForm.html.twig' %}
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</section>
+{% endblock %}

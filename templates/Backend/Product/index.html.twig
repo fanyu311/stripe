@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Admin Produits
+	{{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('admin') }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('admin') }}
+{% endblock %}
+
+{% block body %}
+	<section class="container mt-4">
+		<h1 class="text-center">Administration des produits</h1>
+		<a href="{{ path('admin.products.create') }}" class="btn btn-primary mt-4">Créer un produit</a>
+		<div class="row mt-5 d-flex justify-content-center align-items-center ">
+			{% for product in products %}
+				{% include 'Components/_productCard.html.twig' %}
+			{% endfor %}
+		</div>
+	</section>
+{% endblock %}

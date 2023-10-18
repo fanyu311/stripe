@@ -1,0 +1,101 @@
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+}
+
+html,
+body {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: $font-primary;
+    font-size: 16px;
+    font-weight: 400;
+    color: $text-color;
+    line-height: 28px;
+    transition: 0.5s;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: $heading;
+    margin-bottom: 0;
+}
+
+h1 {
+    font-size: 35px;
+    font-weight: 600;
+    line-height: 45px;
+}
+
+h2 {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 43px;
+    letter-spacing: -0.8px;
+}
+
+h3 {
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 32px;
+}
+
+h4 {
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 30px;
+}
+
+h5 {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+h6 {
+    font-size: 16px;
+    font-weight: 300;
+}
+
+img,
+video,
+figcaption {
+    max-width: 100%;
+}
+
+
+        /**
+         * The CSS shown here will not be introduced in the Quickstart guide, but shows
+         * how you can use CSS to style your Element's container.
+         */
+        .StripeElement {
+            box-sizing: border-box;
+            height: 40px;
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            background-color: white;
+            box-shadow: 0 1px 3px 0 #e6ebf1;
+            -webkit-transition: box-shadow 150ms ease;
+            transition: box-shadow 150ms ease;
+        }
+
+        .StripeElement--focus {
+            box-shadow: 0 1px 3px 0 #cfd7df;
+        }
+
+        .StripeElement--invalid {
+            border-color: #0A9B01;
+        }
+
+        .StripeElement--webkit-autofill {
+            background-color: #fefde5 !important;
+        }
+   

@@ -1,0 +1,19 @@
+{{ form_start(form, {'attr': {'class': 'form card p-3 mt-4 w-75 mx-auto'}}) }}
+
+{{ form_row(form.name) }}
+
+
+{{ form_row(form.image)}}
+
+{{ form_row(form.price) }}
+
+{{ form_row(form.description) }}
+
+
+<div class="text-center">
+	<button class="btn btn-primary" type="submit">{{ buttonLabel|default('Save') }}</button>
+</div>
+
+{{ form_row(form._token) }}
+
+{{ form_end(form, {render_rest: false}) }}

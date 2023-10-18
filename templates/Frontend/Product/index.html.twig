@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProductController!
+{% endblock %}
+
+{% block body %}
+	<section class="container">
+
+		<div class="row mt-5 d-flex justify-content-center align-items-center ">
+			<h1>Les produits</h1>
+			{% for product in products %}
+				{% include 'Components/_productCard.html.twig' %}
+			{% endfor %}
+		</div>
+	</section>
+
+
+{% endblock %}
