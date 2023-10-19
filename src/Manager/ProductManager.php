@@ -61,7 +61,7 @@ class ProductManager
         // provenir de notre service
         $intent = $this->stripeService->paymentIntent($product);
 
-        // quand bon ;il va return un client c'est crée
+        // quand bon ;il va return un clientsecret
         return $intent['client_secret'] ?? null;
     }
 
@@ -77,18 +77,24 @@ class ProductManager
         $data = $this->stripeService->stripe($stripeParameter, $product);
 
         if ($data) {
+            // echo '<pre>';
+            // var_dump($data);
+            // die;
+            // echo '</pre>';
             $resource = [
                 // charge-> première charge de payment
                 // data 0 -> dans le data y a clé 0 => après de ça on peut récupérer ce qu'on a besoin 
                 // id -> on va récupérer l'id de stripe
                 // brand -> visa
-                'stripeBrand' => $data['charges']['data'][0]['payment_method_details']['card']['brand'],
-                'stripeLast4' => $data['charges']['data'][0]['payment_method_details']['card']['last4'],
-                'stripeId' => $data['charges']['data'][0]['id'],
-                'stripeStatus' => $data['charges']['data'][0]['status'],
+                //quand une fois passe le paiement,stripe va retourne tout ca 
+                'stripeBrand' => $data["payment_method"],
+                'stripeLast4' => $data['last4'],
+                'stripeId' => $data['id'],
+                'stripeStatus' => $data['status'],
                 'stripeToken' => $data['client_secret']
             ];
         }
+
 
         return $resource;
     }
@@ -111,7 +117,7 @@ class ProductManager
         $order->setReference(uniqid('', false));
         // place dans le entity ordre
         $order->setBrandStripe($resource['stripeBrand']);
-        $order->setLast4Stripe($resource['stripeLast4']);
+        // $order->setLast4Stripe($resource['stripeLast4']);
         $order->setIdChargeStripe($resource['stripeId']);
         $order->setStripeToken($resource['stripeToken']);
         $order->setStatusStripe($resource['stripeStatus']);

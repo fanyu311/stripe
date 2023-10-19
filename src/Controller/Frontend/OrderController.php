@@ -55,12 +55,13 @@ class OrderController extends AbstractController
             //retourne resource 
             $resource = $productManager->stripe($_POST, $product);
 
+
             if (null !== $resource) {
                 $productManager->create_subscription($resource, $product, $user);
 
                 // la route pour dire que le paiement valider 
                 return $this->render('Frontend/Order/reponse.html.twig', [
-                    'product' => $product
+                    'product' => $product,
                 ]);
             }
         }

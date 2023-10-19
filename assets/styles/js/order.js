@@ -8,22 +8,22 @@ let stripe = Stripe('pk_test_51NxTN4AViwvcrKHvLyrYTylmyAmYqBn7PHbAPANVJzGgUGBh6G
 // 通过Stripe Elements，创建了一个用于输入信用卡信息的部分。Stripe Elements是Stripe提供的用于创建自定义支付表单的工具，以确保信用卡信息的安全输入。这个部分通过 card.mount('#card-elements') 与Stripe Elements绑定。
 let elements = stripe.elements();
 // récuprer l 'id de produits
-var productElement = document.getElementById('product');
-var subscription = productElement.getAttribute('data-id');
+let productElement = document.getElementById('product');
+let subscription = productElement.getAttribute('data-id');
 
 
 // dans le controller on a passé intentsecret #
-var clientSecretElement = document.getElementById('clientSecret');
-var clientSecret = clientSecretElement.getAttribute('data-id');
+let clientSecretElement = document.getElementById('clientSecret');
+let clientSecret = clientSecretElement.getAttribute('data-id');
 console.log('Result paymentIntent', clientSecret);
 
 // info sur le son payment,email / nom / prénom etc ...
-var userElement = document.getElementById('username');
-var cardholderName = userElement.getAttribute('data-id');
+let userElement = document.getElementById('username');
+let cardholderName = userElement.getAttribute('data-id');
 
 
-var cardholderEmailuserElement = document.getElementById('useremail');
-var cardholderEmail = cardholderEmailuserElement.getAttribute('data-id');
+let cardholderEmailuserElement = document.getElementById('useremail');
+let cardholderEmail = cardholderEmailuserElement.getAttribute('data-id');
 console.log(cardholderName, cardholderEmail);
 
 
@@ -111,5 +111,7 @@ form.appendChild(InputIntentId);
 form.appendChild(InputIntentPaymentMethod);
 form.appendChild(InputIntentStatus);
 form.appendChild(InputSubscription);
-form.submit();
+    form.submit();
+   
 }
+

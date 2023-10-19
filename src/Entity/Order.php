@@ -87,55 +87,68 @@ class Order
         return $this->stripeToken;
     }
 
-    public function setStripeToken(string $stripeToken): static
+    /**
+     * @param null|string $stripeToken
+     */
+    public function setStripeToken(?string $stripeToken): static
     {
         $this->stripeToken = $stripeToken;
 
         return $this;
     }
 
+    /**
+     * @param null|string $brandStripe
+     */
     public function getBrandStripe(): ?string
     {
         return $this->brandStripe;
     }
 
-    public function setBrandStripe(string $brandStripe): static
+    public function setBrandStripe(?string $brandStripe): static
     {
         $this->brandStripe = $brandStripe;
 
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getLast4Stripe(): ?string
     {
         return $this->last4Stripe;
     }
 
-    public function setLast4Stripe(string $last4Stripe): static
+    public function setLast4Stripe(?string $last4Stripe): static
     {
         $this->last4Stripe = $last4Stripe;
 
         return $this;
     }
 
+    /**
+     * @param null|string $idChargeStripe
+     */
     public function getIdChargeStripe(): ?string
     {
         return $this->idChargeStripe;
     }
 
-    public function setIdChargeStripe(string $dChargeStripe): static
+    public function setIdChargeStripe(?string $idChargeStripe): static
     {
-        $this->idChargeStripe = $dChargeStripe;
+        $this->idChargeStripe = $idChargeStripe;
 
         return $this;
     }
+
 
     public function getStatusStripe(): ?string
     {
         return $this->statusStripe;
     }
 
-    public function setStatusStripe(string $statusStripe): static
+    public function setStatusStripe(?string $statusStripe): static
     {
         $this->statusStripe = $statusStripe;
 
