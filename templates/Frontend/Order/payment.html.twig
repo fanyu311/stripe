@@ -21,14 +21,16 @@
 									<div id="clientSecret" data-id="{{ intentSecret }}"></div>
 									<div id="username" data-id="{{ user.lastname }}"></div>
 									<div id="useremail" data-id="{{ user.email }}"></div>
+
 								</div>
 								<script src="https://js.stripe.com/v3"></script>
 								{# ajout message de errors #}
 								<div id="card-errors" role="alert"></div>
 							</div>
-							<button class="btn btn-primary mt-4">
+
+							<button class="btn btn-primary mt-4 cart-item cart-item">
 								Acheter
-								{{ product.price }}
+								{{ totalAmount }}
 								€
 							</button>
 						</form>
@@ -48,4 +50,5 @@
 			</div>
 		</div>
 	</section>
+
 {% endblock %}

@@ -20,8 +20,7 @@
 			</div>
 		{% elseif app.request.get('_route') == 'app.products.index' %}
 			<div class="d-flex justify-content-between  me-4 ms-4 my-2">
-				<a href="{{ path('app.orders.index' )}}" class="btn btn-info">Ajouter</a>
-				{# <button class="add-to-cart btn btn-info" data-product-id="{{ product.id }}">Ajouter</button> #}
+				<a href="{{ path('app.orders.add', {id: product.id})}}" class="btn btn-info">Ajouter</a>
 				<a href="{{path('app.orders.payment', {id: product.id})}}" class="btn btn-warning">Acheter</a>
 			</div>
 		{% endif %}

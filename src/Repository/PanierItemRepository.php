@@ -2,26 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Panier;
+use App\Entity\PanierItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Panier>
+ * @extends ServiceEntityRepository<PanierItem>
  *
- * @method Panier|null find($id, $lockMode = null, $lockVersion = null)
- * @method Panier|null findOneBy(array $criteria, array $orderBy = null)
- * @method Panier[]    findAll()
- * @method Panier[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method PanierItem|null find($id, $lockMode = null, $lockVersion = null)
+ * @method PanierItem|null findOneBy(array $criteria, array $orderBy = null)
+ * @method PanierItem[]    findAll()
+ * @method PanierItem[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PanierRepository extends ServiceEntityRepository
+class PanierItemRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Panier::class);
+        parent::__construct($registry, PanierItem::class);
     }
-
-    public function save(Panier $entity, bool $flush = true): void
+    public function save(PanierItem $entity, bool $flush = true): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +29,7 @@ class PanierRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Panier $entity, bool $flush = true): void
+    public function remove(PanierItem $entity, bool $flush = true): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +39,7 @@ class PanierRepository extends ServiceEntityRepository
     }
 
     //    /**
-    //     * @return Panier[] Returns an array of Panier objects
+    //     * @return PanierItem[] Returns an array of PanierItem objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -54,7 +53,7 @@ class PanierRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Panier
+    //    public function findOneBySomeField($value): ?PanierItem
     //    {
     //        return $this->createQueryBuilder('p')
     //            ->andWhere('p.exampleField = :val')

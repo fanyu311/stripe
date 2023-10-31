@@ -14,7 +14,7 @@
 						<a class="nav-link {{ app.request.get('_route') == 'app.products.index' ? 'active' }}" href="{{ path('app.products.index') }}">Produits</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link {{ app.request.get('_route') == 'app.products.index' ? 'active' }}" href="{{ path('app.orders.index') }}">Commandes</a>
+						<a class="nav-link {{ app.request.get('_route') == 'app.orders.commands' ? 'active' }}" href="{{ path('app.orders.commands') }}">Commandes</a>
 					</li>
 				</ul>
 				<div class="navbar-nav ms-auto">
@@ -27,13 +27,13 @@
 								<div class="dropdown-menu" aria-labelledby="triggerId">
 									<a class="dropdown-item" href="{{ path('admin.products.index')}}">Produits</a>
 									<div class="dropdown-divider"></div>
-									<a href="{{path('admin.orders.index')}}" class="dropdown-item">Commandes</a>
+									<a href="{{path('app.payment.orders')}}" class="dropdown-item">Commandes</a>
 									<div class="dropdown-divider"></div>
 									<a href="{{path('admin.users.index')}}" class="dropdown-item">Users</a>
 								</div>
 							</div>
 						{% endif %}
-						<a href="{{ path('app.panier.index') }}" class="btn btn-secondary me-4 text-light">
+						<a href="{{ path('app.orders.index')}}" class="btn btn-secondary me-4 text-light">
 							<i class="bi bi-basket"></i>Panier
 						</a>
 						<a href="{{ path('app.logout') }}" class="btn btn-danger text-light">Se deconnecter</a>

@@ -27,6 +27,7 @@ let cardholderEmail = cardholderEmailuserElement.getAttribute('data-id');
 console.log(cardholderName, cardholderEmail);
 
 
+
 // diseign
 let styleCustom = {
 base: {
@@ -98,6 +99,7 @@ InputIntentId.setAttribute('name', 'stripeIntentId');
 InputIntentPaymentMethod.setAttribute('type', 'hidden');
 InputIntentPaymentMethod.setAttribute('name', 'stripeIntentPaymentMethod');
 InputIntentPaymentMethod.setAttribute('value', intent.payment_method);
+
 
 InputIntentStatus.setAttribute('type', 'hidden');
 InputIntentStatus.setAttribute('name', 'stripeIntentStatus');

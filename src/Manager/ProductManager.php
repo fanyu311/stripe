@@ -2,9 +2,10 @@
 
 namespace App\Manager;
 
+use App\Entity\User;
 use App\Entity\Order;
 use App\Entity\Product;
-use App\Entity\User;
+use App\Entity\PanierItem;
 use App\Services\StripeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -78,7 +79,7 @@ class ProductManager
 
         if ($data) {
             // echo '<pre>';
-            // var_dump($data);
+            // var_dump($data['last4']);
             // die;
             // echo '</pre>';
             $resource = [
@@ -107,6 +108,7 @@ class ProductManager
     // method -> créer un order / commend => besoin de resource de au dessus de method 
     public function create_subscription(array $resource, Product $product, User $user)
     {
+
 
         $order = new Order();
         $order->setUser($user);

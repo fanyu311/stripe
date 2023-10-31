@@ -1,5 +1,4 @@
 <section class="container mt-4">
-	<h1 class="text-center">Mes Commandes</h1>
 	<table class="table table-striped table-light mt-4">
 		<thead>
 			<tr>
@@ -9,19 +8,22 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for product in products %}
-				<tr>
-					<td>{{ product.id }}</td>
+
+			<tr>
+				<td>{{ panier.id }}</td>
+				{% for product in panier.product %}
 					<td>{{ product.name }}</td>
 					<td>{{ product.price }}€</td>
-					<td>
-						<div class="d-flex justify-content-between">
-							<a href="{{ path('app.orders.index') }}" class="btn btn-warning">Payer</a>
-							{% include 'Backend/Product/_deleteForm.html.twig' %}
-						</div>
-					</td>
-				</tr>
-			{% endfor %}
+				{% endfor %}
+
+				<td>
+					<div class="d-flex justify-content-between">
+						<a href="{{ path('app.orders.index') }}" class="btn btn-warning">Payer</a>
+						{% include 'Backend/Product/_deleteForm.html.twig' %}
+					</div>
+				</td>
+			</tr>
+
 		</tbody>
 	</table>
 </section>

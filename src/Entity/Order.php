@@ -2,9 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\OrderRepository;
+use App\Entity\Product;
+use App\Entity\PanierItem;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\OrderRepository;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -51,12 +55,27 @@ class Order
     #[Gedmo\Timestampable(on: 'update')]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?Panier $panier = null;
+
+
+
+
+    public function __construct()
+    {
+    }
+
+
+
+
 
 
     public function getId(): ?int
     {
         return $this->id;
     }
+
+
 
     public function getReference(): ?string
     {
@@ -179,6 +198,12 @@ class Order
         return $this;
     }
 
+    public function addProduct(Product $product)
+    {
+        $this->product[] = $product;
+        $product->addOrder($this);
+    }
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
@@ -199,6 +224,18 @@ class Order
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getPanier(): ?Panier
+    {
+        return $this->panier;
+    }
+
+    public function setPanier(?Panier $panier): static
+    {
+        $this->panier = $panier;
 
         return $this;
     }

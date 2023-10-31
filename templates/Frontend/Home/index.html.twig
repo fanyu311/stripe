@@ -8,11 +8,11 @@
 
 	<section class="container mt-4 position-relative">
 		<h1 class="text-center">Nos derniers Produits</h1>
-		<a href="#" class="btn btn-primary position-absolute top-0 left-0">Voir les articles</a>
-		{# <div class="blog-list mt-4">
-					{% for produit in produits %}
-						{% include 'Components/_produitCard.html.twig' %}
-					{% endfor %}
-				</div> #}
+		<a href="{{path('app.products.index')}}" class="btn btn-primary position-absolute top-0 left-0">Voir les articles</a>
+		<div class="row mt-5 d-flex justify-content-center align-items-center">
+			{% for product in products %}
+				{% include 'Components/_productCard.html.twig' %}
+			{% endfor %}
+		</div>
 	</section>
 {% endblock %}

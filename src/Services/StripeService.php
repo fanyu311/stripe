@@ -19,6 +19,7 @@ class StripeService
      * @return \Stripe\PaymentIntent
      * @throws \Stripe\Exception\ApiErrorException
      */
+    //该方法返回创建的 Stripe 支付 Intent 对象，你可以在后续代码中使用它来完成支付操作。这个方法的目的是将你的产品信息传递给 Stripe，以便为该产品创建一个付款 Intent，为后续的支付操作做准备。
     public function paymentIntent(Product $product)
     {
 
@@ -55,7 +56,9 @@ class StripeService
             //TODO listenerjs
 
         } else {
-            $payment_intent->cancel();
+            if ($payment_intent) {
+                $payment_intent->cancel();
+            }
         }
 
         return $payment_intent;

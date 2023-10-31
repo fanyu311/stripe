@@ -39,7 +39,6 @@ class Product
     private ?int $imageSize = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
     #[ORM\Column]
@@ -53,12 +52,14 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Order::class)]
     private Collection $orders;
 
-    #[ORM\ManyToOne(inversedBy: 'product')]
-    private ?Panier $panier = null;
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: PanierItem::class)]
+    private Collection $panierItems;
+
 
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+        $this->panierItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -217,14 +218,32 @@ class Product
         return $this;
     }
 
-    public function getPanier(): ?Panier
+    /**
+     * @return Collection<int, PanierItem>
+     */
+    public function getPanierItems(): Collection
     {
-        return $this->panier;
+        return $this->panierItems;
     }
 
-    public function setPanier(?Panier $panier): static
+    public function addPanierItem(PanierItem $panierItem): static
     {
-        $this->panier = $panier;
+        if (!$this->panierItems->contains($panierItem)) {
+            $this->panierItems->add($panierItem);
+            $panierItem->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanierItem(PanierItem $panierItem): static
+    {
+        if ($this->panierItems->removeElement($panierItem)) {
+            // set the owning side to null (unless already changed)
+            if ($panierItem->getProduct() === $this) {
+                $panierItem->setProduct(null);
+            }
+        }
 
         return $this;
     }

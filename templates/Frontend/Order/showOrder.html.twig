@@ -1,0 +1,29 @@
+{# templates/order/show_order.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la commande
+{% endblock %}
+
+{% block body %}
+	<div class="card text-center">
+		<div class="card-header">
+			Détails de la commande
+		</div>
+		<div class="card-body">
+
+			<img src="{{ vich_uploader_asset(order.product, 'image')}}" alt="product.name" class="img-thumbnail w-50 p-3 ">
+
+
+			<h5 class="card-title">Produit :
+				{{ order.product.name }}</h5>
+			<p class="card-text">Prix :
+				{{ order.price|number_format(2, ',', '.') }}</p>
+			<a href="{{ path('app.orders.index') }}" class="btn btn-primary ">Retour à la liste des commandes</a>
+		</div>
+		<div class="card-footer text-body-secondary">
+			{{ order.createdAt|format_datetime('full', 'none') }}
+		</div>
+	</div>
+
+
+{% endblock %}

@@ -44,6 +44,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Panier::class)]
     private Collection $paniers;
 
+
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
