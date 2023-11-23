@@ -10,14 +10,18 @@ use App\Entity\Product;
 use Stripe\PaymentIntent;
 use App\Entity\PanierItem;
 use App\Form\PanierItemType;
+use Stripe\Checkout\Session;
 use App\Manager\ProductManager;
 use App\Services\StripeService;
 use App\Repository\OrderRepository;
+use App\Repository\PanierRepository;
 use App\Repository\ProductRepository;
+use App\Repository\PanierItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -27,8 +31,11 @@ class OrderController extends AbstractController
 
     public function __construct(
         private OrderRepository $repo,
+        private PanierItemRepository $panierRepo,
         private ProductRepository $productRepo,
+        private EntityManagerInterface $entityManager
     ) {
+        $this->entityManager = $entityManager;
     }
 
     // la route d'acceuille de panier-> pour pouvoir accéder panier 
@@ -108,17 +115,31 @@ class OrderController extends AbstractController
 
     //Ajouter une fonction IndexOrders au controller OrderController / Cette fonction permet d'afficher la liste de mes commandes
     #[Route('/payment', name: '.commands', methods: ["GET", "POST"])]
-    public function indexOrders(ProductManager $productManager): Response
+    public function indexOrders(): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('login');
-        }
+        // if (!$this->getUser()) {
+        //     return $this->redirectToRoute('login');
+        // }
 
-        return $this->render('Frontend/Order/paymentStory.html.twig', [
-            'user' => $this->getUser(),
-            'orders' => $productManager->getOrders($this->getUser()),
-            'sumOrder' => $productManager->countSoldeOrder($this->getUser()),
-        ]);
+        // 获取当前用户的订单信息（这里假设订单与用户关联）
+        $user = $this->getUser();
+        $order = $this->entityManager->getRepository(Panier::class)->findOneBy(['user' => $user]);
+
+        // 检查订单是否存在
+        if (!$order) {
+            throw $this->createNotFoundException('Order not found for the current user.');
+        }
+        // dd($order);
+        return $this->render(
+            'Frontend/Order/paymentStory.html.twig',
+            [
+                'order' => $order,
+            ]
+            // 'user' => $this->getUser(),
+            // 'orders' => $productManager->getOrders($this->getUser()),
+
+            // 'sumOrder' => $productManager->countSoldeOrder($this->getUser()),
+        );
     }
 
     //Ajouter route et fonction  AddProductTo Order au controller OrderController / Cette fonction permet d'ajouter un produit à la commande
@@ -215,8 +236,6 @@ class OrderController extends AbstractController
         SessionInterface $session,
         ProductRepository $productRepo,
         EntityManagerInterface $em,
-        ProductManager $productManager,
-        StripeService $stripeService, // 注入StripeService,
 
     ): Response {
 
@@ -233,86 +252,73 @@ class OrderController extends AbstractController
         }
 
         // si le panier n'est pas vide , on crée la commande 
-        $order = new Panier();
+        $panierToOrder = new Panier();
         // on remplit la commande
-        $order->setUser($this->getUser());
-        $order->setReference(uniqid());
-
-        // 初始化一个关联数组，用于存储stripe支付intent相关的参数信息
-        //先把参数初设值为null-> 在支付intent创建后，他将被设置为实际的stripe支付intent的id跟实际状态
-        $stripeParameters = [
-            'stripeIntentId' => null, // 根据需要设置Stripe参数
-            'stripeIntentStatus' => null,
-        ];
-
-        $totalAmount = 0; // 用于存储总金额
+        $panierToOrder->setUser($this->getUser());
+        $panierToOrder->setReference(uniqid());
 
         // on parcourt le panier pour créer les détails de commande
-        foreach ($panier as $itemId => $quantity) {
+        foreach ($panier as $item => $quantity) {
+            //on crée le détail de commande 
+            $panierItem = new PanierItem();
             // on va chercher le produit 
-            $product = $productRepo->find($itemId);
-
-            if (!$product) {
-                $this->addFlash('error', 'Certains produits dans votre panier ne sont plus disponibles.');
-                continue;
-            }
+            $product = $productRepo->find($item);
 
             $price = $product->getPrice();
 
-            // 累加总金额
-            $totalAmount += $price * $quantity;
-
-            //on crée le détail de commande 
-            $panierItem = new PanierItem();
             $panierItem->setProduct($product);
             $panierItem->setPrice($price);
             $panierItem->setQuantity($quantity);
-            $panierItem->setPanier($order);
+            // $panierItem->setPanier($order);
 
             // 添加购物车项到购物车 // ajoute le détail de commande dans le exterieur de command
-            $order->addPanierItem($panierItem);
-        }
-        // 设置订单的总金额
-        $order->setTotalAmount($totalAmount);
-
-        // 使用StripeService创建付款Intent
-        try {
-            $paymentIntent = $stripeService->paymentIntent($product);
-        } catch (\Stripe\Exception\ApiErrorException $e) {
-            // 处理Stripe支付错误
-            $this->addFlash('error', 'Erreur de paiement Stripe.');
-            return $this->redirectToRoute('app.cart');
-        }
-
-        $stripeParameters['stripeIntentId'] = $paymentIntent->id; // 设置Stripe参数
-        $stripeParameters['stripeIntentStatus'] = $paymentIntent->status; // 设置Stripe参数
-
-        // 在循环中进行支付
-        $stripeService->paiement($totalAmount * 100, Order::DEVISE, $product->getName(), $stripeParameters);
-
-        // dd($totalAmount);
-        if ($order->getPanierItems()->isEmpty()) {
-            $this->addFlash('error', 'Aucun produit valide dans le panier.');
-            return $this->redirectToRoute('app.homepage');
+            $panierToOrder->addPanierItem($panierItem);
         }
 
         // on persiste et on flush -> on créer et on excute mes requete
-        $em->persist($order);
+        $em->persist($panierToOrder);
         $em->flush();
-        // dd($order);
-        // quand tout fini le ajouter recharge le page vont remove les articles 
-        $session->remove('panier');
-        // $this->addFlash('success', 'Paiement de votre commande');
 
-        return $this->render('Frontend/Order/payment.html.twig', [
-            'totalAmount' => $totalAmount,
-            'product' => $product,
-            //dans le productmanager -> intentSecret
-            'intentSecret' => $productManager->intentSecret($product),
-            'user' => $this->getUser(),
-            'order' => $order,
+
+        $session->remove('panier');
+        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY_TEST']);
+
+        foreach ($panierToOrder->getPanierItems() as $panierItem) {
+            $panierItemArray[] = [
+                'name' => $panierItem->getProduct()->getName(),
+                'price' => $panierItem->getPrice(),
+                'quantity' => $panierItem->getQuantity(),
+            ];
+        };
+        $session = Session::create([
+            'line_items'     => [
+                array_map(fn (array $product) => [
+                    'quantity' => $product['quantity'],
+                    'price_data' => [
+                        'currency' => 'EUR',
+                        'product_data' => [
+                            'name' => $product['name']
+                        ],
+                        'unit_amount' => $product['price'] * 100
+                    ]
+                ], $panierItemArray)
+            ],
+            'mode'  => 'payment',
+            'success_url' => $this->generateUrl('app.orders.success', [], UrlGenerator::ABSOLUTE_URL),
+            'cancel_url' => $this->generateUrl('app.orders.index', [], UrlGenerator::ABSOLUTE_URL)
+        ]);
+
+        return $this->redirect($session->url);
+    }
+
+    #[Route('/success', name: '.success')]
+    public function Success(Panier $panier): Response
+    {
+        return $this->render('Frontend/Order/successStripe.html.twig', [
+            'panier' => $panier,
         ]);
     }
+
 
     // Ajouter une fonction CancelOrder au controller OrderController / Cette fonction permet de supprimer une commande 
 
@@ -347,15 +353,20 @@ class OrderController extends AbstractController
     #[Route('/showorder/{id}', name: '.showorder')]
     public function ShowOrder(Request $request): Response
     {
-        $order = $this->repo->find($request->get('id', 0));
 
-        if (!$order) {
+        $panierItem = $this->panierRepo->find($request->get('id', 0));
+
+
+        dd($panierItem);
+
+
+        if (!$panierItem) {
             throw $this->createNotFoundException('La commande n\'existe pas.');
         }
 
         return $this->render('Frontend/Order/showOrder.html.twig', [
-            'order' => $order,
-            'product' => $order->getProduct(),
+            'panierItem' => $panierItem,
+            // 'product' => $panierItem->getProduct(),
         ]);
     }
 }

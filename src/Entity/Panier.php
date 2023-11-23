@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\PanierRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Order;
+use App\Entity\PanierItem;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PanierRepository;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: PanierRepository::class)]
 class Panier
@@ -30,8 +32,6 @@ class Panier
     #[ORM\Column(length: 255)]
     private ?string $reference = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $totalAmount = null;
 
     #[ORM\OneToMany(mappedBy: 'panier', targetEntity: Order::class)]
     private Collection $orders;
@@ -117,17 +117,6 @@ class Panier
         return $this;
     }
 
-    public function getTotalAmount(): ?float
-    {
-        return $this->totalAmount;
-    }
-
-    public function setTotalAmount(string $totalAmount): self
-    {
-        $this->totalAmount = $totalAmount;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Order>

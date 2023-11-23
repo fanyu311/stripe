@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20231030210404 extends AbstractMigration
+final class Version20231120085540 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20231030210404 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE panier ADD total_amount NUMERIC(10, 2) NOT NULL');
+        $this->addSql('ALTER TABLE product CHANGE price price DOUBLE PRECISION NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE panier DROP total_amount');
+        $this->addSql('ALTER TABLE product CHANGE price price DOUBLE PRECISION NOT NULL');
     }
 }

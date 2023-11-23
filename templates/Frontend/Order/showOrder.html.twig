@@ -11,17 +11,17 @@
 		</div>
 		<div class="card-body">
 
-			<img src="{{ vich_uploader_asset(order.product, 'image')}}" alt="product.name" class="img-thumbnail w-50 p-3 ">
+			<img src="{{ vich_uploader_asset(panierItem.product, 'image')}}" alt="panierItem.product.name" class="img-thumbnail w-50 p-3 ">
 
 
 			<h5 class="card-title">Produit :
-				{{ order.product.name }}</h5>
+				{{ panierItem.product.name }}</h5>
 			<p class="card-text">Prix :
-				{{ order.price|number_format(2, ',', '.') }}</p>
-			<a href="{{ path('app.orders.index') }}" class="btn btn-primary ">Retour à la liste des commandes</a>
+				{{ panierItem.price|number_format(2, ',', '.') }}</p>
+			<a href="{{ path('app.orders.commands') }}" class="btn btn-primary ">Retour à la liste des commandes</a>
 		</div>
 		<div class="card-footer text-body-secondary">
-			{{ order.createdAt|format_datetime('full', 'none') }}
+			{{ panierItem.createdAt|format_datetime('full', 'none') }}
 		</div>
 	</div>
 

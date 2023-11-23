@@ -30,10 +30,6 @@ class PanierItem
     private ?float $price = null;
 
 
-
-
-
-
     public function getId(): ?int
     {
         return $this->id;

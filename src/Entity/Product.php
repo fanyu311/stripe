@@ -26,8 +26,8 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $price = null;
+    #[ORM\Column]
+    private ?float $price = null;
 
     #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName', size: 'imageSize')]
     private ?File $image = null;
@@ -55,11 +55,15 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: PanierItem::class)]
     private Collection $panierItems;
 
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderDetails::class)]
+    private Collection $orderDetails;
+
 
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->panierItems = new ArrayCollection();
+        $this->orderDetails = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -91,12 +95,12 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?string
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(string $price): static
+    public function setPrice(float $price): static
     {
         $this->price = $price;
 
@@ -242,6 +246,36 @@ class Product
             // set the owning side to null (unless already changed)
             if ($panierItem->getProduct() === $this) {
                 $panierItem->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderDetails>
+     */
+    public function getOrderDetails(): Collection
+    {
+        return $this->orderDetails;
+    }
+
+    public function addOrderDetail(OrderDetails $orderDetail): static
+    {
+        if (!$this->orderDetails->contains($orderDetail)) {
+            $this->orderDetails->add($orderDetail);
+            $orderDetail->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderDetail(OrderDetails $orderDetail): static
+    {
+        if ($this->orderDetails->removeElement($orderDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($orderDetail->getProduct() === $this) {
+                $orderDetail->setProduct(null);
             }
         }
 

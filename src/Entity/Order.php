@@ -58,24 +58,22 @@ class Order
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?Panier $panier = null;
 
+    #[ORM\OneToMany(mappedBy: 'orders', targetEntity: OrderDetails::class, orphanRemoval: true, cascade: ['persist'])]
+    private Collection $orderDetails;
+
 
 
 
     public function __construct()
     {
+        $this->orderDetails = new ArrayCollection();
     }
-
-
-
-
 
 
     public function getId(): ?int
     {
         return $this->id;
     }
-
-
 
     public function getReference(): ?string
     {
@@ -236,6 +234,36 @@ class Order
     public function setPanier(?Panier $panier): static
     {
         $this->panier = $panier;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderDetails>
+     */
+    public function getOrderDetails(): Collection
+    {
+        return $this->orderDetails;
+    }
+
+    public function addOrderDetail(OrderDetails $orderDetail): static
+    {
+        if (!$this->orderDetails->contains($orderDetail)) {
+            $this->orderDetails->add($orderDetail);
+            $orderDetail->setOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderDetail(OrderDetails $orderDetail): static
+    {
+        if ($this->orderDetails->removeElement($orderDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($orderDetail->getOrder() === $this) {
+                $orderDetail->setOrder(null);
+            }
+        }
 
         return $this;
     }
